@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <title>无意义单词生成器</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
+    #wrap {
+      height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+
+    #content {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .shuru {
+      background-color: rgba(255, 255, 255, 0);
+      border-width: 0 0 1px 0;
+      outline: none;
+      position: relative;
+      margin: 10px auto;
+      display: block;
+    }
+  </style>
+
+</head>
+
+<body id="content">
+  <h3>无意义单词生成器</h3>
+  单词长度：<input type="text" id="length" class="shuru" value="5"><br>
+  单词个数：<input type="text" id="amout" class="shuru" value="10"><br>
+  <input type="submit" id="num">
+  <p>生成单词：</p>
+  <p id="result">yukino</p>
+  <script>
+    let consonants = "bcdfghjklmnprstvwxyz";
+    let vowels = "aeiou";
+    document.getElementById("num").onclick = function () {
+      document.getElementById("result").innerHTML = "";
+      let b = true;
+      for (let j = 0; j < document.getElementById('amout').value; j++) {
+        b = true;
+        for (let i = 0; i < document.getElementById('length').value; i++) {
+          document.getElementById("result").innerHTML += b ? consonants[Math.floor(Math.random() * 20)] : vowels[Math.floor(Math.random() * 5)];
+          b = !b;
+        }
+        document.getElementById("result").innerHTML += "<br>";
+      }
+    }
+  </script>
+</body>
+
+</html>
