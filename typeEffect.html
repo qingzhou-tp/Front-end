@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+
+  </style>
+</head>
+
+<body>
+  <h1>打字机效果生成器</h1>
+  <label>请输入文本：</label><input type="text" id="type">
+  <br><button onclick="typeEffect()">打字机效果</button><br>
+  <h2 id="showText"></h2>
+  <script>
+    let l, inp;
+    let typeEffect = () => {
+      l = 0;
+      inp = document.getElementById("type");
+      setInterval(() => {
+        document.getElementById("showText").innerHTML = inp.value.slice(0, l++) + '_';
+        if (l == inp.value.length + 1) l = 0;
+      }, 200);
+    }
+  </script>
+
+</body>
+
+</html>
