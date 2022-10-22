@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: cadetblue;
+      padding: 1rem;
+    }
+
+    .main {
+      background-color: gray;
+      margin: 0 auto;
+      padding: 3rem 1rem;
+      text-align: center;
+      height: 40rem;
+    }
+
+    .mytitle {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+    }
+
+    #keyword {
+      height: 1.5rem;
+      width: 20rem;
+      position: absolute;
+      left: 2rem;
+      top: 5rem;
+    }
+
+    #x {
+      position: absolute;
+      left: 21rem;
+      top: 5.1rem;
+      cursor: pointer;
+    }
+
+    .card {
+      text-align: left;
+      background-color: white;
+      margin: 1rem;
+      padding: .5rem;
+      min-width: 20rem;
+    }
+
+    .name {
+      margin: .5rem;
+    }
+
+    .tele {
+      margin: .5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="mytitle">电话簿</div>
+  </header>
+
+  <div class="main">
+
+    <input onkeydown=" return checkPhoneKey(event.key)" id="keyword" type="text" placeholder="搜索联系人..">
+
+    <div id="x" onclick="return clickx()"></div>
+    <div id="showDATA">
+
+    </div>
+  </div>
+  <script>
+    let elex = document.getElementById('x');
+    let keyword = document.getElementById("keyword");
+    let showDATA = document.getElementById('showDATA');
+    let DATA = [{
+      name: "Amy",
+      tele: "1234567890"
+    }, {
+      name: "Bob",
+      tele: "1324567890"
+    }, {
+      name: "Danny",
+      tele: "1884567890"
+    }, {
+      name: "Jojo",
+      tele: "1994567890"
+    }];
+    DATA.forEach(item => {
+      showDATA.insertAdjacentHTML("beforeend", `<div class="card">
+        <div class="name">name:${item.name}</div>
+        <div class="tele">telenumber:${item.tele}</div>
+        </div>`)
+    });
+    function clickx () {
+      keyword.value = "";
+      setTimeout(() => {
+        elex.innerHTML = "";
+        let child = showDATA.lastChild;
+        while (child) {
+          child.remove();
+          child = showDATA.lastChild;
+        }
+        DATA.forEach(item => {
+          showDATA.insertAdjacentHTML("beforeend", `<div class="card">
+        <div class="name">name:${item.name}</div>
+        <div class="tele">telenumber:${item.tele}</div>
+        </div>`)
+        })
+      }, 100)
+    }
+    function checkPhoneKey (key) {
+      let successinput = (key >= '0' && key <= '9') ||
+        ['ArrowLeft', 'ArrowRight', 'Delete', 'Backspace'].includes(key) ||
+        "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM".split("").includes(key);
+      if (successinput) {
+        setTimeout(() => {
+          if (keyword.value != '') elex.innerHTML = "x";
+          else elex.innerHTML = '';
+          let child = showDATA.lastChild;
+          while (child) {
+            child.remove();
+            child = showDATA.lastChild;
+          }
+          DATA.forEach(item => {
+            if (item.name.indexOf(keyword.value) != -1 || item.tele.indexOf(keyword.value) != -1) {
+              showDATA.insertAdjacentHTML("beforeend", `<div class="card">
+        <div class="name">name:${item.name}</div>
+        <div class="tele">telenumber:${item.tele}</div>
+        </div>`)
+            }
+          })
+        }, 100)
+      }
+      return successinput;
+    }
+  </script>
+
+</body>
+
+</html>
