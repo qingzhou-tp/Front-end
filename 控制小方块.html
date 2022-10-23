@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .bigbox {
+      background-color: white;
+      border: 1px solid #32a1ce;
+      width: 500px;
+      height: 500px;
+    }
+
+    #blackbox {
+      background-color: black;
+      position: absolute;
+      width: 50px;
+      height: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bigbox">
+    <div id="blackbox"></div>
+  </div>
+  <script>
+    let blackbox = document.getElementById("blackbox");
+    let t = 0, l = 0;
+    let isonCtrl = false;
+
+    document.addEventListener("keydown", e => {
+      if (e.key == 'Control') isonCtrl = true;
+      else if (e.key == 'ArrowLeft') {
+        if (l > 0) {
+          if (!isonCtrl) l -= 10;
+          else l -= 20;
+          blackbox.style.left = l + "px";
+        }
+      }
+      else if (e.key == 'ArrowDown') {
+        if (t < 450) {
+          if (!isonCtrl) t += 10;
+          else t += 20;
+          blackbox.style.top = t + "px";
+        }
+      }
+      else if (e.key == 'ArrowRight') {
+        if (l < 450) {
+          if (!isonCtrl) l += 10;
+          else l += 20;
+          blackbox.style.left = l + "px";
+        }
+      }
+      else if (e.key == 'ArrowUp') {
+        if (t > 0) {
+          if (!isonCtrl) t -= 10;
+          else t -= 20;
+          blackbox.style.top = t + "px";
+        }
+      }
+    });
+    document.addEventListener("keyup", e => {
+      if (e.key == 'Control') isonCtrl = false;
+    });
+  </script>
+
+</body>
+
+</html>
