@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      background-color: rgb(31, 30, 30);
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      font-size: 0;
+    }
+
+    /* 设置inline-block的父元素的font-size为0，解决其间隔问题 */
+    .littleSuare {
+      background-color: rgb(45, 45, 45);
+      width: 10px;
+      height: 10px;
+      margin: 1px;
+      display: inline-block;
+      border-radius: 1px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="container"></div>
+  <script>
+    let container = document.getElementById("container");
+    //生成一个小方块阵列，并且给每个小方块绑定鼠标移入和移出事件
+    function generateSuare () {
+      for (let j = 0; j < 30; j++) {
+        for (let i = 0; i < 30; i++) {
+          container.insertAdjacentHTML('beforeend',
+            `<div class='littleSuare'> </div>`
+          );
+          let lastChild = container.lastChild;
+          lastChild.onmouseover = () => {
+            setColor(lastChild);
+          };
+          lastChild.onmouseout = () => {
+            deleteColor(lastChild);
+          }
+        }
+        container.insertAdjacentHTML('beforeend',
+          `<br>`
+        )
+      }
+    }
+    //这个函数实现设置小方块颜色，并且绑定到鼠标移入事件
+    function setColor (element) {
+      element.style["background-color"] = `rgb(${Math.round(Math.random() * 255)},${Math.round(Math.random() * 255)},${Math.round(Math.random() * 255)})`;
+      element.style.transition = "background-color 0s";
+    }
+
+    //这个函数实现去除小方块颜色，并且绑定到鼠标移出事件
+    function deleteColor (element) {
+      element.style["background-color"] = `rgb(45,45,45)`;
+      element.style.transition = "background-color 2s";
+    }
+    generateSuare();
+  </script>
+
+</body>
+
+</html>
