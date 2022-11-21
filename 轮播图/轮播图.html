@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      text-decoration: none;
+      list-style: none;
+    }
+
+    .box {
+      height: 1000px;
+      width: 1500px;
+      border: 2px solid #999;
+      overflow: hidden;
+    }
+
+    .myimg {
+      height: 1000px;
+      width: 1500px;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .myimg div {
+      font-size: 100px;
+      position: relative;
+      top: 60%;
+      left: 550px;
+      color: orange;
+    }
+
+    .myimg div+div {
+      font-size: 60px;
+    }
+
+    .imglist {
+      width: 6000px;
+      height: 1000px;
+    }
+
+    li {
+      float: left;
+    }
+
+    .botlist {
+      position: absolute;
+      top: 50%;
+      left: 650px;
+      text-align: center;
+    }
+
+    .botlist li {
+      width: 30px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0);
+      border-radius: 50%;
+      border: 10px solid orange;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .prev,
+    .next {
+      font-size: 80px;
+      font-weight: 900;
+      position: absolute;
+      color: rgb(255, 187, 0);
+      top: 420px;
+      cursor: pointer;
+    }
+
+    .next {
+      left: 1440px;
+    }
+  </style>
+  <title>轮播图</title>
+</head>
+
+<body>
+  <div class="box">
+    <div class="prev">&lt;</div>
+    <div class="next">&gt;</div>
+    <ul class="imglist">
+      <li>
+        <div class="myimg" style="background-image: url(photo/photo1.jpg);">
+          <div>图片标题</div>
+          <div>描述</div>
+        </div>
+      </li>
+      <li>
+        <div class="myimg" style="background-image: url(photo/photo2.jpg);">
+          <div>图片标题</div>
+          <div>描述</div>
+        </div>
+      </li>
+      <li>
+        <div class="myimg" style="background-image: url(photo/photo3.jpg);">
+          <div>图片标题</div>
+          <div>描述</div>
+        </div>
+      </li>
+      <li>
+        <div class="myimg" style="background-image: url(photo/photo1.jpg);">
+          <div>图片标题</div>
+          <div>描述</div>
+        </div>
+      </li>
+    </ul>
+    <ul class="botlist">
+      <li id="0"></li>
+      <li id="1"></li>
+      <li id="2"></li>
+    </ul>
+  </div>
+  <script>
+    let left = 0;
+    let timer;
+    let position = 0;
+    let ul = document.querySelector('.imglist');
+    let prev = document.querySelector('.prev');
+    let next = document.querySelector('.next');
+    let botlist = document.querySelector('.botlist');
+    botlist.childNodes[position * 2 + 1].style.background = 'orange';
+    console.log(botlist.childNodes);
+    let chooseBot = (num) => {//第num个图片对应下标点表示为实心，其他为空心
+      botlist.childNodes.forEach(item => {
+        if (item.id != undefined && item.id != num) {
+          item.style.background = 'rgba(0,0,0,0)';
+        }
+      })
+      botlist.childNodes[num * 2 + 1].style.background = 'orange';
+    }
+    let run = () => {
+      if (left <= - 4500) {
+        left = 0;
+      }
+      ul.style.marginLeft = left + 'px';
+      let n = left % 1500 == 0 ? 1200 : 10;
+      left -= 10;
+      if (n === 1200) {
+        position = Math.floor(-left / 1500);
+        chooseBot(position);
+      }
+      timer = setTimeout(run, n);
+    }
+    //点击图片对应下标实现跳转
+    botlist.childNodes.forEach(item => {
+      if (item.id != undefined) {
+        item.onclick = () => {
+          clearTimeout(timer);
+          ul.style.marginLeft = -(item.id * 1500) + 'px';
+          chooseBot(item.id);
+          left = -(item.id * 1500);
+          setTimeout(run, 10);
+        }
+      }
+    });
+    //轮播到上一张图
+    let toPrevImg = () => {
+      if (left >= 0) {
+        left = -4500;
+      }
+      timer = setTimeout(toPrevImg, .1);
+      ul.style.marginLeft = left + 'px';
+      if (position == (Math.floor(-left / 1500) - 1) || (position == 2 && Math.floor(-left / 1500) == 0)) {
+        clearTimeout(timer);
+        timer = setTimeout(run, 10);
+      }
+      else {
+        left += 10;
+      }
+    }
+    prev.onclick = () => {
+      if (left < 0) {
+        clearTimeout(timer);
+        toPrevImg();
+      }
+    }
+    //轮播到下一张图
+    let toNextImg = () => {
+      if (left <= -4500) {
+        left = 0;
+      }
+      ul.style.marginLeft = left + 'px';
+      timer = setTimeout(toNextImg, .1);
+      if ((position + 1 == (Math.floor(-left / 1500))) || position - 2 == Math.floor(-left / 1500)) {
+        clearTimeout(timer);
+        timer = setTimeout(run, 10);
+      }
+      else {
+        left -= 10;
+      }
+    }
+    next.onclick = () => {
+      clearTimeout(timer);
+      toNextImg();
+    }
+    run();
+  </script>
+
+</body>
+
+</html>
