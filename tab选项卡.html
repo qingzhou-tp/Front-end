@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    ul {
+      list-style: none;
+    }
+
+    li {
+      margin: 0 10px;
+      float: left;
+    }
+
+    section {
+      margin: 0 50px;
+      width: 500px;
+      display: none;
+      transition: color 2s;
+    }
+
+    section[id='s1'] {
+      display: block;
+    }
+
+    p {
+      font-weight: 600;
+    }
+
+    .tab {
+      color: black;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .line {
+      width: 700px;
+      height: 1px;
+      background-color: #000;
+      display: inline-block;
+    }
+
+    .square {
+      width: 80px;
+      height: 20px;
+      background-color: green;
+      position: relative;
+      top: -10px;
+      left: 50px;
+      transition-property: left, background-color;
+      transition-duration: .5s, .5s;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="doma">button</button>
+  <div class="tabs">
+    <!-- 导航栏 -->
+    <nav class="nav-tabs">
+      <ul>
+        <li>
+          <a class="tab active" href="javascript:;" data-content="s1">档案资料一</a>
+        </li>
+        <li><a class="tab" href="javascript:;" data-content="s2">档案资料二</button></a>
+        <li>
+          <a class="tab" href="javascript:;" data-content="s3">档案资料三</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="line">
+      <div class="square"></div>
+    </div>
+    <br>
+    <!-- 内容栏 -->
+    <section id="s1">
+      <p>提升信赖至50%以查看更多信息</p>
+      干员史尔特尔被发现于乌萨斯周边的一个遭到了天灾侵害的小镇废墟之中。当时罗德岛干员在当地执行灾后勘探任务，无意间碰到了看起来好像是遇难了的史尔特尔，当时她一个人呆在损毁的房屋中休息。干员们担心史尔特尔会受到后续灾害影响，选择将其带回了罗德岛。后来才知道，原来当时干员史尔特尔只是路过当地找了一个落脚处休息而已。
+    </section>
+    <section id="s2">
+      <p>提升信赖至100%以查看更多信息</p>
+      虽然史尔特尔作战强度远远超过了普通作战干员，但是其能力却并不属于任何一种源石技艺。利用随身携带的双手大剑，史尔特尔可以轻松破坏周遭环境。剑体引起的高温可以轻易融化一般物质，但是原理却难以解析。该大剑的来历史尔特尔本人也无法回忆，对于她来说，不知不觉这把剑就陪伴着她了。在此基础上，史尔特尔即使出入一般的感染区域，其感染程度也几乎不会扩大。这是否会成为矿石病研究的重要一环，我们尚不可知。
+    </section>
+    <section id="s3">
+      <p>提升信赖至150%以查看更多信息</p>
+      史尔特尔的记忆认知障碍并不同于普通的记忆缺失，而是一段时间的多重记忆混乱。按照史尔特尔的说法，她的脑中有大量不同记忆，在这些记忆中的史尔特尔自己拥有完全不同的人际关系，身处完全不同的地理位置。由于调查难度过高，无法辨别其真实性。不知道这些真的是史尔特尔亲身的体验，还是她把一些见闻当成是了自己的经历。
+    </section>
+  </div>
+  <script>
+    //1.首先练习一下事件的绑定和删除，请您实现以下函数
+    // 给一个element绑定一个针对event事件的响应，响应函数为listener
+    function addEvent (element, event, listener) {
+      let el = document.querySelector(element);
+      el.addEventListener(event, listener);
+    }
+
+    // 移除element对象对于event事件发生时执行listener的响应
+    function removeEvent (element, event, listener) {
+      let el = document.querySelector(element);
+      el.removeEventListener(event, listener);
+    }
+
+    // 给一个element绑定一个针对event事件的响应，响应函数为listener,但是listener只执行一次
+    function addEventOnce (element, event, listener) {
+      let el = document.querySelector(element);
+      let once = true;
+      el.addEventListener(event, () => {
+        if (once) {
+          listener();
+          once = false;
+        }
+      })
+    }
+
+    // 例如：
+    function clicklistener (event) {
+      console.log(this);
+    }
+
+    // 测试用例
+    addEvent("#doma", "click", clicklistener);//给id 为 doma 元素的点击事件添加了clicklistener事件处理程序
+    removeEvent("#doma", "click", clicklistener);//给 id 为 doma 元素的点击事件删除了clicklistener事件处理程序
+    addEventOnce("#doma", "click", clicklistener);//给 id 为 doma 元素的点击事件添加了onceClicklistener事件处理程序，doma 元素点击后onceClicklistener事件处理程序从 doma 元素上删除
+
+    //2.实现一个 Tab 选项卡项目
+
+    //给所有选项卡（.tab）绑定 click 事件侦听器
+    let myTab = document.querySelectorAll('.tab');
+    let section = document.querySelectorAll('section');
+    let square = document.querySelector('.square');
+    myTab.forEach(el => {
+      el.addEventListener('click', () => {
+        let dataContent = el.dataset.content;
+        section.forEach(sEl => {
+          if (sEl.id != dataContent) {
+            sEl.style.display = 'none';
+          }
+          else {
+            sEl.style.color = '#fff';
+            sEl.style.display = 'block';
+            sEl.style.transition = 'color 2s';
+            setTimeout(
+              () => {
+                sEl.style.color = '#000';
+              }, 1)
+          }
+        });
+        switch (dataContent) {
+          case 's1': {
+            square.style['background-color'] = 'green';
+            square.style.left = '50px';
+            break;
+          }
+          case 's2': {
+            square.style['background-color'] = 'blue';
+            square.style.left = '170px';
+            break;
+          }
+          case 's3': {
+            square.style['background-color'] = 'red';
+            square.style.left = '290px';
+            break;
+          }
+        }
+      })
+    })
+
+
+  </script>
+</body>
+
+</html>
