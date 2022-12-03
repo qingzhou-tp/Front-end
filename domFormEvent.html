@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
+    form {
+      position: relative;
+      top: 100px;
+      left: 100px;
+    }
+
+    /* 表单对齐*/
+    label {
+      display: inline-block;
+      width: 100px;
+      text-align: right;
+    }
+
+    div {
+      margin: 30px;
+    }
+
+    input {
+      width: 250px;
+      height: 30px;
+      border: 1px solid rgb(173, 173, 173);
+    }
+
+    input:focus {
+      outline: 3px solid rgb(0, 140, 255);
+      border-radius: 3px;
+    }
+
+    input~div {
+      position: relative;
+      left: 110px;
+      font-size: 10px;
+      margin: 0;
+      height: 10px;
+    }
+
+    button {
+      position: relative;
+      left: 290px;
+      width: 70px;
+      height: 30px;
+      background-color: rgb(0, 140, 255);
+      color: white;
+      border: none;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <form name="myform">
+    <div>
+      <label>名称：</label>
+      <input data-name="名称" data-tip="必填，长度为4-16个字符" type="text">
+      <div></div>
+    </div>
+    <div>
+      <label>密码：</label>
+      <input id="password" data-name="密码" data-tip="必填，长度为6-16个字符" type="password">
+      <div></div>
+    </div>
+    <div>
+      <label>确认密码：</label>
+      <input data-name="密码输入" data-tip="再次输入相同密码" type="password">
+      <div></div>
+    </div>
+    <div>
+      <label>邮箱：</label>
+      <input data-name="邮箱" data-tip="请输入正确格式" type="email">
+      <div></div>
+    </div>
+    <div>
+      <label>手机：</label>
+      <input data-name="手机" data-tip="长度为11个数字" type="text">
+      <div></div>
+    </div>
+    <div>
+      <button>提交</button>
+    </div>
+  </form>
+  <script>
+    let form = document.querySelector('form');
+    // 避免浏览器会数据发送到当前页面
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      // the form will not reload anymore
+    });
+    let input = document.querySelectorAll('input');
+    input.forEach(el => {
+      let tip = el.dataset.tip;
+      let name = el.dataset.name;
+      let tipdiv = el.nextElementSibling;
+      el.onblur = function () {
+        if (el.value == "") {
+          tipdiv.textContent = `${name}不能为空`;
+          tipdiv.style.color = 'red';
+        }
+        else if (name == '名称' && (el.value.length > 16 || el.value.length < 4)) {
+          tipdiv.textContent = `${name}格式错误`;
+          tipdiv.style.color = 'red';
+        }
+        else if (name == '密码' && (el.value.length > 16 || el.value.length < 6)) {
+          tipdiv.textContent = `${name}格式错误`;
+          tipdiv.style.color = 'red';
+        }
+        else if (name == '密码输入') {
+          let password = document.querySelector('#password');
+          if (el.value != password.value) {
+            tipdiv.textContent = `${name}不一致`;
+            tipdiv.style.color = 'red';
+          }
+          else {
+            tipdiv.textContent = `${name}一致`;
+            tipdiv.style.color = 'green';
+          }
+        }
+        else if (name == '邮箱' && el.value.indexOf('@') == -1) {
+          tipdiv.textContent = `${name}格式错误`;
+          tipdiv.style.color = 'red';
+        }
+        else if (name == '手机' && el.value.length != 11) {
+          tipdiv.textContent = `${name}格式错误`;
+          tipdiv.style.color = 'red';
+        }
+        else {
+          tipdiv.textContent = `${name}可用`;
+          tipdiv.style.color = 'green';
+        }
+      };
+      el.onfocus = function () {
+        tipdiv.textContent = tip;
+        tipdiv.style.color = 'black';
+      }
+    });
+    let button = document.querySelector('button');
+    //提交表单时验证
+    button.onclick = function () {
+      let submitSuccess = true;
+      input.forEach(el => {
+        if (el.value == '') {
+          submitSuccess = false;
+          let tipdiv = el.nextElementSibling;
+          let name = el.dataset.name;
+          tipdiv.textContent = `${name}不能为空`;
+          tipdiv.style.color = 'red';
+        }
+      });
+      if (submitSuccess) {
+        alert('提交成功！');
+      }
+      else alert('提交失败！');
+    }
+  </script>
+</body>
+
+</html>
